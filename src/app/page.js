@@ -5,8 +5,8 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 export default function Home() {
   const { data: session, status, ...rest } = useSession();
-console.log(session , "session")
-console.log(status , "session")
+  console.log(session, "session");
+  console.log(status, "session");
   if (status === "loading") {
     return <p>Loading....</p>;
   }
@@ -25,7 +25,9 @@ console.log(status , "session")
         width={100}
         height={24}
         priority
-        onClick={() => signIn("google")}
+        onClick={async () => {
+          await signIn();
+        }}
       />
     </>
   );
