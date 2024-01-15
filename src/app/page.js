@@ -26,7 +26,7 @@ export default function Home() {
         height={24}
         priority
         onClick={async () => {
-          await signIn();
+          await signIn("google");
         }}
       />
     </>
