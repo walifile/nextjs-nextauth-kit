@@ -18,7 +18,7 @@ export default function Home() {
   // }
   return (
     <>
-      <Image
+      {/* <Image
         src="/assets/svg/google.svg"
         alt="Vercel Logo"
         className="dark:invert"
@@ -28,7 +28,7 @@ export default function Home() {
         onClick={async () => {
           await signIn("google");
         }}
-      />
+      /> */}
       <SignUp />
     </>
   );
