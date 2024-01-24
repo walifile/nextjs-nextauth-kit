@@ -30,6 +30,7 @@ export default function Home() {
           await signIn("google");
         }}
       /> */}
+      <SignUp />
       <SignIn />
     </>
   );

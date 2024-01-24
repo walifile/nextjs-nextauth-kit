@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { FaFacebook, FaGoogle } from "react-icons/fa";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -99,7 +100,18 @@ const Login = () => {
             Log In
           </button>
         </form>
-        <p className="mt-4 text-sm text-gray-600 text-center">
+        <div className="mt-4 flex flex-col items-center">
+          {/* Social Login Buttons */}
+          <div>
+            <button className="mb-2 mr-2 p-2 bg-blue-500 text-white rounded-full">
+              <FaFacebook />
+            </button>
+            <button className="p-2 bg-red-500 text-white rounded-full">
+              <FaGoogle />
+            </button>
+          </div>
+        </div>
+        <p className="text-sm text-center text-gray-600 mt-4">
           Don't have an account?{" "}
           <a href="#" className="text-indigo-500 hover:underline">
             Sign up
