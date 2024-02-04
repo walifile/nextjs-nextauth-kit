@@ -4,8 +4,10 @@ import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
-
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 const Login = () => {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
   const formik = useFormik({
@@ -17,9 +19,18 @@ const Login = () => {
       email: Yup.string().email("Invalid email").required("Email is required"),
       password: Yup.string().required("Password is required"),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       // Handle form submission logic here
       console.log("Form submitted:", values);
+      const res = await signIn("credentials", {
+        username: values.email,
+        password: values.password,
+        redirect: false,
+      });
+
+      if (!res?.error) {
+        // router.push(props.callbackUrl ?? "http://localhost:3000");
+      }
     },
   });
 
