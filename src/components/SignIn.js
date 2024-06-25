@@ -27,7 +27,7 @@ const Login = () => {
         password: values.password,
         redirect: false,
       });
-
+      console.log(res, "res");
       if (!res?.error) {
         // router.push(props.callbackUrl ?? "http://localhost:3000");
       }

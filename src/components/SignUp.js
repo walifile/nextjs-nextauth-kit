@@ -7,14 +7,16 @@ import { FaFacebook, FaGoogle } from "react-icons/fa";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
-
+  const [error, setError] = useState("");
   const formik = useFormik({
     initialValues: {
+      name: "",
       email: "",
       password: "",
       confirmPassword: "",
     },
     validationSchema: Yup.object({
+      // name: Yup.string().required("Name is required"),
       email: Yup.string()
         .email("Invalid email")
         .matches(/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/, "Invalid email format")
@@ -30,9 +32,32 @@ const SignUp = () => {
         .oneOf([Yup.ref("password"), null], "Passwords must match")
         .required("Confirm Password is required"),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       // Handle form submission logic here
       console.log("Form submitted:", values);
+
+      try {
+        const res = await fetch("/api/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        });
+        if (res.status === 400) {
+          setError("This email is already registered");
+        }
+        if (res.status === 200) {
+          setError("");
+          router.push("/login");
+        }
+      } catch (error) {
+        setError("Error, try again");
+        console.log(error);
+      }
     },
   });
 
@@ -47,6 +72,31 @@ const SignUp = () => {
           Sign Up
         </h2>
         <form onSubmit={formik.handleSubmit}>
+          <div className="mb-6">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-600"
+            >
+              Name
+            </label>
+            <input
+              type="name"
+              id="name"
+              name="name"
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className={`mt-1 p-3 w-full border rounded-md focus:outline-none focus:ring focus:border-indigo-300 placeholder-gray-500 text-black ${
+                formik.touched.name && formik.errors.name
+                  ? "border-red-500"
+                  : ""
+              }`}
+              placeholder="you@example.com"
+            />
+            {formik.touched.name && formik.errors.name && (
+              <p className="text-sm text-red-500">{formik.errors.name}</p>
+            )}
+          </div>
           <div className="mb-6">
             <label
               htmlFor="email"
@@ -162,6 +212,7 @@ const SignUp = () => {
             </button>
           </div>
         </div>
+        {error && error}
         <p className="text-sm text-center text-gray-600 mt-4">
           Already have an account?{" "}
           <a href="#" className="text-indigo-500 hover:underline">
