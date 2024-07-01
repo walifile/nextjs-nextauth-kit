@@ -52,8 +52,6 @@ export const options = {
       //   }
       // },
       async authorize(credentials, req) {
-        // console.log(credentials, "credentials");
-        // console.log(req, "req");
         if (!credentials?.email || !credentials?.password) return null;
         const { email, password } = credentials;
         const res = await fetch(Backend_URL + "/auth/login", {
@@ -66,18 +64,12 @@ export const options = {
             "Content-Type": "application/json",
           },
         });
-        if (
-          res.status == 401 ||
-          res.status === 400 ||
-          res.status === 403 ||
-          res.status === 500
-        ) {
+        if (res.status === 200) {
+          const user = await res.json();
+          return user;
+        } else {
           return null;
         }
-
-        // console.log(res, "res");
-        const user = await res.json();
-        return user;
       },
     }),
   ],
@@ -88,7 +80,7 @@ export const options = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) return { ...token, ...user };
-      // return token;
+      return token;
       // console.log(token, "token");
       // console.log("=============================");
       // console.log(user, "hgfd");

@@ -13,6 +13,9 @@ const Login = () => {
   console.log(session, "session");
   console.log(status, "statys");
   // console.log(rest, "session");
+
+  const [isLoading, setIsLoading] = useState(false);
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -23,6 +26,7 @@ const Login = () => {
       password: Yup.string().required("Password is required"),
     }),
     onSubmit: async (values) => {
+      setIsLoading(true);
       // Handle form submission logic here
       // console.log("Form submitted:", values);
       const res = await signIn("credentials", {
@@ -33,6 +37,7 @@ const Login = () => {
       console.log(res, "res");
       if (!res?.error) {
         // router.push(props.callbackUrl ?? "http://localhost:3000");
+      } else {
       }
     },
   });
