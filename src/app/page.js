@@ -3,14 +3,14 @@
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
 import SignUp from "@/components/SignUp";
-import SignIn from "@/components/SignIn";
+
 export default function Home() {
   const { data: session, status, ...rest } = useSession();
   // console.log(session, "session");
   // console.log(status, "session");
-  if (status === "loading") {
-    return <p>Loading....</p>;
-  }
+  // if (status === "loading") {
+  //   return <p>Loading....</p>;
+  // }
   // if (status === "authenticated") {
   //   return <button onClick={() => signOut("google")}>Logout</button>;
   // }
@@ -30,9 +30,6 @@ export default function Home() {
           await signIn("google");
         }}
       /> */}
-      <button onClick={() => signOut("google")}>Logout</button>
-      <SignUp />
-      <SignIn />
     </>
   );
 }

@@ -74,7 +74,7 @@ export const options = {
     }),
   ],
   pages: {
-    signIn: "/",
+    signIn: "/auth/login",
   },
   secret: "vxcvxvertwrwerwe",
   callbacks: {

@@ -1,11 +1,13 @@
 // src/components/Login.js
-
+"use client";
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Input } from "../ui/input";
+import Link from "next/link";
 const Login = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
@@ -58,21 +60,21 @@ const Login = () => {
           Log In
         </h2>
         <form onSubmit={formik.handleSubmit}>
-          <div className="mb-6">
+          <div className="mb-3">
             <label
               htmlFor="email"
               className="block text-sm font-medium text-gray-600"
             >
               Email
             </label>
-            <input
+            <Input
               type="email"
               id="email"
               name="email"
               value={formik.values.email}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className={`mt-1 p-3 w-full border rounded-md focus:outline-none focus:ring focus:border-indigo-300 placeholder-gray-500 text-black ${
+              className={`${
                 formik.touched.email && formik.errors.email
                   ? "border-red-500"
                   : ""
@@ -83,7 +85,7 @@ const Login = () => {
               <p className="text-sm text-red-500">{formik.errors.email}</p>
             )}
           </div>
-          <div className="mb-6">
+          <div className="mb-3">
             <label
               htmlFor="password"
               className="block text-sm font-medium text-gray-600"
@@ -91,20 +93,21 @@ const Login = () => {
               Password
             </label>
             <div className="relative">
-              <input
+              <Input
                 type={showPassword ? "text" : "password"}
                 id="password"
                 name="password"
                 value={formik.values.password}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className={`mt-1 p-3 w-full border rounded-md focus:outline-none focus:ring focus:border-indigo-300 placeholder-gray-500 text-black ${
+                className={`${
                   formik.touched.password && formik.errors.password
                     ? "border-red-500"
                     : ""
                 }`}
                 placeholder="********"
               />
+
               <button
                 type="button"
                 onClick={handleTogglePassword}
@@ -123,12 +126,6 @@ const Login = () => {
           >
             Log In
           </button>
-          <button
-            type="submit"
-            className="bg-indigo-500 text-white py-3 w-full rounded-md hover:bg-indigo-600 transition duration-300"
-          >
-            {status}
-          </button>
         </form>
         <div className="mt-4 flex flex-col items-center">
           {/* Social Login Buttons */}
@@ -143,9 +140,12 @@ const Login = () => {
         </div>
         <p className="text-sm text-center text-gray-600 mt-4">
           Don't have an account?{" "}
-          <a href="#" className="text-indigo-500 hover:underline">
+          <Link
+            href="/auth/register"
+            className="text-indigo-500 hover:underline"
+          >
             Sign up
-          </a>
+          </Link>
         </p>
       </div>
     </div>

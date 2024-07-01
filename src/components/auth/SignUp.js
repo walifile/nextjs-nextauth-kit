@@ -1,10 +1,11 @@
 // src/components/SignUp.js
-
+"use client";
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
-
+import { Input } from "@/components/ui/input";
+import Link from "next/link";
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
@@ -66,7 +67,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-500">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-500 py-5">
       <div className="max-w-md w-full p-6 bg-white rounded-md shadow-md">
         <h2 className="text-3xl font-semibold text-center text-gray-800 mb-6">
           Sign Up
@@ -79,14 +80,14 @@ const SignUp = () => {
             >
               Name
             </label>
-            <input
+            <Input
               type="name"
               id="name"
               name="name"
               value={formik.values.name}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className={`mt-1 p-3 w-full border rounded-md focus:outline-none focus:ring focus:border-indigo-300 placeholder-gray-500 text-black ${
+              className={`${
                 formik.touched.name && formik.errors.name
                   ? "border-red-500"
                   : ""
@@ -104,14 +105,14 @@ const SignUp = () => {
             >
               Email
             </label>
-            <input
+            <Input
               type="email"
               id="email"
               name="email"
               value={formik.values.email}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className={`mt-1 p-3 w-full border rounded-md focus:outline-none focus:ring focus:border-indigo-300 placeholder-gray-500 text-black ${
+              className={`${
                 formik.touched.email && formik.errors.email
                   ? "border-red-500"
                   : ""
@@ -130,14 +131,14 @@ const SignUp = () => {
               Password
             </label>
             <div className="relative">
-              <input
+              <Input
                 type={showPassword ? "text" : "password"}
                 id="password"
                 name="password"
                 value={formik.values.password}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className={`mt-1 p-3 w-full border rounded-md focus:outline-none focus:ring focus:border-indigo-300 placeholder-gray-500 text-black ${
+                className={`${
                   formik.touched.password && formik.errors.password
                     ? "border-red-500"
                     : ""
@@ -164,14 +165,14 @@ const SignUp = () => {
               Confirm Password
             </label>
             <div className="relative">
-              <input
+              <Input
                 type={showPassword ? "text" : "password"}
                 id="confirmPassword"
                 name="confirmPassword"
                 value={formik.values.confirmPassword}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className={`mt-1 p-3 w-full border rounded-md focus:outline-none focus:ring focus:border-indigo-300 placeholder-gray-500 text-black ${
+                className={` ${
                   formik.touched.confirmPassword &&
                   formik.errors.confirmPassword
                     ? "border-red-500"
@@ -215,9 +216,9 @@ const SignUp = () => {
         {error && error}
         <p className="text-sm text-center text-gray-600 mt-4">
           Already have an account?{" "}
-          <a href="#" className="text-indigo-500 hover:underline">
+          <Link href="/auth/login" className="text-indigo-500 hover:underline">
             Log in
-          </a>
+          </Link>
         </p>
       </div>
     </div>
