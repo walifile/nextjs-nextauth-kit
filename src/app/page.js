@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
-import SignUp from "@/components/SignUp";
 
 export default function Home() {
   const { data: session, status, ...rest } = useSession();
