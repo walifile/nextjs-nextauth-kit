@@ -6,14 +6,14 @@ import SignUp from "@/components/SignUp";
 import SignIn from "@/components/SignIn";
 export default function Home() {
   const { data: session, status, ...rest } = useSession();
-  console.log(session, "session");
-  console.log(status, "session");
+  // console.log(session, "session");
+  // console.log(status, "session");
   if (status === "loading") {
     return <p>Loading....</p>;
   }
-  if (status === "authenticated") {
-    return <button onClick={() => signOut("google")}>Logout</button>;
-  }
+  // if (status === "authenticated") {
+  //   return <button onClick={() => signOut("google")}>Logout</button>;
+  // }
   // if (status === "unauthenticated") {
   //   return <p>user un authenticated</p>;
   // }
@@ -30,6 +30,7 @@ export default function Home() {
           await signIn("google");
         }}
       /> */}
+      <button onClick={() => signOut("google")}>Logout</button>
       <SignUp />
       <SignIn />
     </>

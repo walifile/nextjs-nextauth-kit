@@ -1,4 +1,22 @@
 import CredentialsProvider from "next-auth/providers/credentials";
+const Backend_URL = "https://apifinterview.thecbt.live/api/v1";
+
+async function refreshToken(token) {
+  const res = await fetch(Backend_URL + "/auth/refresh", {
+    method: "POST",
+    headers: {
+      authorization: `Refresh ${token.backendTokens.refreshToken}`,
+    },
+  });
+  console.log("refreshed");
+
+  const response = await res.json();
+
+  return {
+    ...token,
+    backendTokens: response,
+  };
+}
 
 export const options = {
   providers: [
@@ -34,23 +52,30 @@ export const options = {
       //   }
       // },
       async authorize(credentials, req) {
-        if (!credentials?.username || !credentials?.password) return null;
-        const { username, password } = credentials;
+        // console.log(credentials, "credentials");
+        // console.log(req, "req");
+        if (!credentials?.email || !credentials?.password) return null;
+        const { email, password } = credentials;
         const res = await fetch(Backend_URL + "/auth/login", {
           method: "POST",
           body: JSON.stringify({
-            username,
+            email,
             password,
           }),
           headers: {
             "Content-Type": "application/json",
           },
         });
-        if (res.status == 401) {
-          console.log(res.statusText);
-
+        if (
+          res.status == 401 ||
+          res.status === 400 ||
+          res.status === 403 ||
+          res.status === 500
+        ) {
           return null;
         }
+
+        // console.log(res, "res");
         const user = await res.json();
         return user;
       },
@@ -59,10 +84,19 @@ export const options = {
   pages: {
     signIn: "/",
   },
-
+  secret: "vxcvxvertwrwerwe",
   callbacks: {
     async jwt({ token, user }) {
       if (user) return { ...token, ...user };
+      // return token;
+      // console.log(token, "token");
+      // console.log("=============================");
+      // console.log(user, "hgfd");
+      // console.log(rest, "rest");
+      // console.log(resrt, "rest");
+      // return { ...token, ...user };
+
+      // if (user) return { ...token, ...user };
 
       // if (new Date().getTime() < token.backendTokens.expiresIn) return token;
 
@@ -70,8 +104,16 @@ export const options = {
     },
 
     async session({ token, session }) {
+      // console.log(session, "sesssinsnsn");
+      // console.log(token, "token");
+      // console.log(rest, "rest");
+      // console.log(rest2, "rest2");
+      // session.user = token.user;
+      // session.backendTokens = token.backendTokens;
+      // return token;
+
       session.user = token.user;
-      session.backendTokens = token.backendTokens;
+      // session.backendTokens = token.backendTokens;
 
       return session;
     },

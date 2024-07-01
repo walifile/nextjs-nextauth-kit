@@ -4,12 +4,15 @@ import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 const Login = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-
+  const { data: session, status, loading, ...rest } = useSession();
+  console.log(session, "session");
+  console.log(status, "statys");
+  // console.log(rest, "session");
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -21,9 +24,9 @@ const Login = () => {
     }),
     onSubmit: async (values) => {
       // Handle form submission logic here
-      console.log("Form submitted:", values);
+      // console.log("Form submitted:", values);
       const res = await signIn("credentials", {
-        username: values.email,
+        email: values.email,
         password: values.password,
         redirect: false,
       });
@@ -37,6 +40,10 @@ const Login = () => {
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
+
+  if (status === "loading") {
+    return <p>Loading....</p>;
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-500">
@@ -109,6 +116,12 @@ const Login = () => {
             className="bg-indigo-500 text-white py-3 w-full rounded-md hover:bg-indigo-600 transition duration-300"
           >
             Log In
+          </button>
+          <button
+            type="submit"
+            className="bg-indigo-500 text-white py-3 w-full rounded-md hover:bg-indigo-600 transition duration-300"
+          >
+            {status}
           </button>
         </form>
         <div className="mt-4 flex flex-col items-center">
