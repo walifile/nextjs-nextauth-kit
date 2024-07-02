@@ -8,6 +8,8 @@ import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Input } from "../ui/input";
 import Link from "next/link";
+import Label from "../shared/heading/Label";
+import NormalHeading from "../shared/heading/NormalHeading";
 const Login = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
@@ -34,7 +36,8 @@ const Login = () => {
       const res = await signIn("credentials", {
         email: values.email,
         password: values.password,
-        redirect: false,
+        redirect: true,
+        callbackUrl: "/user",
       });
       setIsLoading(false);
       console.log(res, "res");
@@ -56,17 +59,10 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-500">
       <div className="max-w-md w-full p-6 bg-white rounded-md shadow-md">
-        <h2 className="text-3xl font-semibold text-center text-gray-800 mb-6">
-          Log In
-        </h2>
+        <NormalHeading title="Login In" />
         <form onSubmit={formik.handleSubmit}>
           <div className="mb-3">
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Email
-            </label>
+            <Label title="Email" />
             <Input
               type="email"
               id="email"
@@ -74,24 +70,13 @@ const Login = () => {
               value={formik.values.email}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className={`${
-                formik.touched.email && formik.errors.email
-                  ? "border-red-500"
-                  : ""
-              }`}
+              error={formik.touched.email && formik.errors.email}
+              helperText={formik.errors.email}
               placeholder="you@example.com"
             />
-            {formik.touched.email && formik.errors.email && (
-              <p className="text-sm text-red-500">{formik.errors.email}</p>
-            )}
           </div>
           <div className="mb-3">
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Password
-            </label>
+            <Label title="Password" />
             <div className="relative">
               <Input
                 type={showPassword ? "text" : "password"}
@@ -100,31 +85,26 @@ const Login = () => {
                 value={formik.values.password}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className={`${
-                  formik.touched.password && formik.errors.password
-                    ? "border-red-500"
-                    : ""
-                }`}
+                error={formik.touched.password && formik.errors.password}
+                helperText={formik.errors.password}
                 placeholder="********"
               />
 
               <button
                 type="button"
                 onClick={handleTogglePassword}
-                className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 focus:outline-none"
+                className="absolute top-[1.2rem] right-3 transform -translate-y-1/2 text-gray-500 focus:outline-none"
               >
                 {showPassword ? "Hide" : "Show"}
               </button>
             </div>
-            {formik.touched.password && formik.errors.password && (
-              <p className="text-sm text-red-500">{formik.errors.password}</p>
-            )}
           </div>
           <button
             type="submit"
-            className="bg-indigo-500 text-white py-3 w-full rounded-md hover:bg-indigo-600 transition duration-300"
+            className="bg-indigo-500 text-white py-2 w-full rounded-md hover:bg-indigo-600 transition duration-300"
+            disabled={isLoading}
           >
-            Log In
+            {isLoading ? "Loading..." : "Log In"}
           </button>
         </form>
         <div className="mt-4 flex flex-col items-center">

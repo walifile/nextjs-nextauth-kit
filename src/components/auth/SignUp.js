@@ -1,4 +1,3 @@
-// src/components/SignUp.js
 "use client";
 import React, { useState } from "react";
 import { useFormik } from "formik";
@@ -6,6 +5,8 @@ import * as Yup from "yup";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import Label from "@/components/shared/heading/Label";
+import NormalHeading from "../shared/heading/NormalHeading";
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
@@ -17,7 +18,7 @@ const SignUp = () => {
       confirmPassword: "",
     },
     validationSchema: Yup.object({
-      // name: Yup.string().required("Name is required"),
+      name: Yup.string().required("Name is required"),
       email: Yup.string()
         .email("Invalid email")
         .matches(/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/, "Invalid email format")
@@ -69,17 +70,10 @@ const SignUp = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-500 py-5">
       <div className="max-w-md w-full p-6 bg-white rounded-md shadow-md">
-        <h2 className="text-3xl font-semibold text-center text-gray-800 mb-6">
-          Sign Up
-        </h2>
+        <NormalHeading title="Sign  Up" />
         <form onSubmit={formik.handleSubmit}>
           <div className="mb-6">
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Name
-            </label>
+            <Label title="Name" />
             <Input
               type="name"
               id="name"
@@ -87,24 +81,13 @@ const SignUp = () => {
               value={formik.values.name}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className={`${
-                formik.touched.name && formik.errors.name
-                  ? "border-red-500"
-                  : ""
-              }`}
-              placeholder="you@example.com"
+              error={formik.touched.name && formik.errors.name}
+              helperText={formik.errors.name}
+              placeholder="John"
             />
-            {formik.touched.name && formik.errors.name && (
-              <p className="text-sm text-red-500">{formik.errors.name}</p>
-            )}
           </div>
           <div className="mb-6">
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Email
-            </label>
+            <Label title="Email" />
             <Input
               type="email"
               id="email"
@@ -112,24 +95,13 @@ const SignUp = () => {
               value={formik.values.email}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className={`${
-                formik.touched.email && formik.errors.email
-                  ? "border-red-500"
-                  : ""
-              }`}
+              error={formik.touched.email && formik.errors.email}
+              helperText={formik.errors.email}
               placeholder="you@example.com"
             />
-            {formik.touched.email && formik.errors.email && (
-              <p className="text-sm text-red-500">{formik.errors.email}</p>
-            )}
           </div>
           <div className="mb-6">
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Password
-            </label>
+            <Label title="Password" />
             <div className="relative">
               <Input
                 type={showPassword ? "text" : "password"}
@@ -138,32 +110,22 @@ const SignUp = () => {
                 value={formik.values.password}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className={`${
-                  formik.touched.password && formik.errors.password
-                    ? "border-red-500"
-                    : ""
-                }`}
+                error={formik.touched.password && formik.errors.password}
+                helperText={formik.errors.password}
                 placeholder="********"
               />
               <button
                 type="button"
                 onClick={handleTogglePassword}
-                className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 focus:outline-none"
+                className="absolute top-[1.2rem] right-3 transform -translate-y-1/2 text-gray-500 focus:outline-none"
               >
                 {showPassword ? "Hide" : "Show"}
               </button>
             </div>
-            {formik.touched.password && formik.errors.password && (
-              <p className="text-sm text-red-500">{formik.errors.password}</p>
-            )}
           </div>
           <div className="mb-6">
-            <label
-              htmlFor="confirmPassword"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Confirm Password
-            </label>
+            <Label title="Confirm Password" />
+
             <div className="relative">
               <Input
                 type={showPassword ? "text" : "password"}
@@ -172,32 +134,25 @@ const SignUp = () => {
                 value={formik.values.confirmPassword}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className={` ${
+                error={
                   formik.touched.confirmPassword &&
                   formik.errors.confirmPassword
-                    ? "border-red-500"
-                    : ""
-                }`}
+                }
+                helperText={formik.errors.confirmPassword}
                 placeholder="********"
               />
               <button
                 type="button"
                 onClick={handleTogglePassword}
-                className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 focus:outline-none"
+                className="absolute top-[1.2rem] right-3 transform -translate-y-1/2 text-gray-500 focus:outline-none"
               >
                 {showPassword ? "Hide" : "Show"}
               </button>
             </div>
-            {formik.touched.confirmPassword &&
-              formik.errors.confirmPassword && (
-                <p className="text-sm text-red-500">
-                  {formik.errors.confirmPassword}
-                </p>
-              )}
           </div>
           <button
             type="submit"
-            className="bg-indigo-500 text-white py-3 w-full rounded-md hover:bg-indigo-600 transition duration-300"
+            className="bg-indigo-500 text-white py-2 w-full rounded-md hover:bg-indigo-600 transition duration-300"
           >
             Sign Up
           </button>
