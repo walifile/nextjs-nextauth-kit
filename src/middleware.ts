@@ -29,7 +29,7 @@ export default withAuth(
 
     if (
       request.nextUrl.pathname.startsWith("/admin") &&
-      request.nextauth.token.user.role !== 2
+      request?.nextauth?.token?.user?.role !== 2
     ) {
       return NextResponse.rewrite(new URL("/auth/login", request.url));
     }
