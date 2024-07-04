@@ -1,52 +1,52 @@
 // src/components/Login.js
 "use client";
 import React, { useState } from "react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
-import { signIn, useSession } from "next-auth/react";
+import { signIn, useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Input } from "../ui/input";
 import Link from "next/link";
 import Label from "../shared/heading/Label";
 import NormalHeading from "../shared/heading/NormalHeading";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema, LoginSchemaType } from "@/schema";
+
 const Login = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const { data: session, status, loading, ...rest } = useSession();
-  console.log(session, "session");
-  console.log(status, "statys");
+  const { data: session, status, ...rest } = useSession();
+  // console.log(session, "session");
+  // console.log(status, "statys");
   // console.log(rest, "session");
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const formik = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-    },
-    validationSchema: Yup.object({
-      email: Yup.string().email("Invalid email").required("Email is required"),
-      password: Yup.string().required("Password is required"),
-    }),
-    onSubmit: async (values) => {
-      setIsLoading(true);
-      // Handle form submission logic here
-      // console.log("Form submitted:", values);
-      const res = await signIn("credentials", {
-        email: values.email,
-        password: values.password,
-        redirect: true,
-        callbackUrl: "/user",
-      });
-      setIsLoading(false);
-      console.log(res, "res");
-      if (!res?.error) {
-        // router.push(props.callbackUrl ?? "http://localhost:3000");
-      } else {
-      }
-    },
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginSchemaType>({
+    resolver: zodResolver(loginSchema),
+    mode: "onBlur",
+    reValidateMode: "onChange",
+    shouldFocusError: true,
   });
+
+  const onSubmit: SubmitHandler<LoginSchemaType> = async (values) => {
+    setIsLoading(true);
+    const res = await signIn("credentials", {
+      email: values.email,
+      password: values.password,
+      redirect: false,
+    });
+    setIsLoading(false);
+    if (!res?.error) {
+      router.push("/");
+    } else {
+      // handle error
+    }
+  };
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
@@ -59,19 +59,16 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-500">
       <div className="max-w-md w-full p-6 bg-white rounded-md shadow-md">
-        <NormalHeading title="Login In" />
-        <form onSubmit={formik.handleSubmit}>
+        <NormalHeading title="Sign  In" />
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-3">
             <Label title="Email" />
             <Input
               type="email"
               id="email"
-              name="email"
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.email && formik.errors.email}
-              helperText={formik.errors.email}
+              {...register("email")}
+              error={!!errors.email}
+              helperText={errors.email?.message}
               placeholder="you@example.com"
             />
           </div>
@@ -81,15 +78,11 @@ const Login = () => {
               <Input
                 type={showPassword ? "text" : "password"}
                 id="password"
-                name="password"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.password && formik.errors.password}
-                helperText={formik.errors.password}
+                {...register("password")}
+                error={!!errors.password}
+                helperText={errors.password?.message}
                 placeholder="********"
               />
-
               <button
                 type="button"
                 onClick={handleTogglePassword}
@@ -110,7 +103,10 @@ const Login = () => {
         <div className="mt-4 flex flex-col items-center">
           {/* Social Login Buttons */}
           <div>
-            <button className="mb-2 mr-2 p-2 bg-blue-500 text-white rounded-full">
+            <button
+              className="mb-2 mr-2 p-2 bg-blue-500 text-white rounded-full"
+              onClick={() => signOut()}
+            >
               <FaFacebook />
             </button>
             <button className="p-2 bg-red-500 text-white rounded-full">

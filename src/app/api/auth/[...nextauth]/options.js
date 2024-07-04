@@ -64,6 +64,7 @@ export const options = {
             "Content-Type": "application/json",
           },
         });
+
         if (res.status === 200) {
           const user = await res.json();
           return user;
@@ -75,9 +76,18 @@ export const options = {
   ],
   pages: {
     signIn: "/auth/login",
+    error: "/error",
   },
   secret: "vxcvxvertwrwerwe",
   callbacks: {
+    // async signIn({ user, account, profile, email, credentials }) {
+    //   // return true;
+    //   // console.log(user, account, profile, email, credentials, "gf");
+    // },
+    // async redirect({ url, baseUrl }) {
+    //   // return baseUrl;
+    //   console.log(url, baseUrl, "url");
+    // },
     async jwt({ token, user }) {
       if (user) return { ...token, ...user };
       return token;
