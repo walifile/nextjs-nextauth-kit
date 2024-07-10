@@ -16,7 +16,7 @@ const Login = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const { data: session, status, ...rest } = useSession();
-  // console.log(session, "session");
+  console.log(session, "session");
   // console.log(status, "statys");
   // console.log(rest, "session");
 
@@ -41,6 +41,7 @@ const Login = () => {
       redirect: false,
     });
     setIsLoading(false);
+    console.log(res, "res ligin");
     if (!res?.error) {
       router.push("/");
     } else {

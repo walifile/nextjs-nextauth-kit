@@ -1,4 +1,6 @@
 import CredentialsProvider from "next-auth/providers/credentials";
+// const Backend_URL =
+//   "https://appsellapi.thecbt.live/api/user/login/user-appsell";
 const Backend_URL = "https://apifinterview.thecbt.live/api/v1";
 
 async function refreshToken(token) {
@@ -65,11 +67,19 @@ export const options = {
           },
         });
 
+        const user = await res.json();
+
         if (res.status === 200) {
-          const user = await res.json();
           return user;
         } else {
-          return null;
+          // return null;
+
+          throw new Error(
+            JSON.stringify({
+              errors: user?.message,
+              status: false,
+            })
+          );
         }
       },
     }),
